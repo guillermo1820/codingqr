@@ -1,0 +1,184 @@
+.app-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.login-card {
+  max-width: 400px;
+  margin: 50px auto;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.matrix-config-card,
+.matrix-input-card,
+.result-card {
+  margin-bottom: 20px;
+}
+
+.matrix-size-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.matrix-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.matrix-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.matrix-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.matrix-cell {
+  width: 80px;
+}
+
+.matrix-cell input {
+  text-align: center;
+}
+
+.process-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.results-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.matrices-result {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.matrix-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.matrix-section h4 {
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.matrix-display {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.matrix-display .matrix-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.matrix-display .matrix-cell {
+  width: 60px;
+  text-align: center;
+  padding: 4px;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.stat-item mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.stat-item h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-item p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 10px;
+  }
+  
+  .matrices-result {
+    flex-direction: column;
+  }
+  
+  .matrix-section {
+    min-width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .matrix-row {
+    flex-wrap: wrap;
+  }
+  
+  .matrix-cell {
+    width: 60px;
+  }
+}

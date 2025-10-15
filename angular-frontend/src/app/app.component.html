@@ -1,0 +1,190 @@
+<div class="app-container">
+  <mat-toolbar color="primary">
+    <span>{{ title }}</span>
+    <span class="spacer"></span>
+    <button *ngIf="!isLoggedIn" mat-button (click)="onLogin()" [disabled]="!loginForm.valid">
+      Iniciar Sesión
+    </button>
+    <button *ngIf="isLoggedIn" mat-button (click)="onLogout()">
+      Cerrar Sesión
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <!-- Formulario de Login -->
+    <mat-card *ngIf="!isLoggedIn" class="login-card">
+      <mat-card-header>
+        <mat-card-title>Iniciar Sesión</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="loginForm">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="admin">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contraseña</mat-label>
+            <input matInput type="password" formControlName="password" placeholder="guillermo.cirilo">
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onLogin()" [disabled]="!loginForm.valid">
+          Iniciar Sesión
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+
+    <!-- Contenido principal -->
+    <div *ngIf="isLoggedIn" class="main-content">
+      <!-- Configuración de matriz -->
+      <mat-card class="matrix-config-card">
+        <mat-card-header>
+          <mat-card-title>Configuración de Matriz</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="matrix-size-controls">
+            <mat-form-field appearance="outline">
+              <mat-label>Filas</mat-label>
+              <input matInput type="number" [(ngModel)]="matrixSize.rows" (change)="updateMatrixSize()" min="1" max="10">
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Columnas</mat-label>
+              <input matInput type="number" [(ngModel)]="matrixSize.cols" (change)="updateMatrixSize()" min="1" max="10">
+            </mat-form-field>
+          </div>
+          
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Matriz de entrada -->
+      <mat-card class="matrix-input-card">
+        <mat-card-header>
+          <mat-card-title>Matriz de Entrada</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-header>
+          <div class="matrix-actions">
+            <button mat-raised-button color="accent" (click)="generateRandomMatrix()">
+              Generar Aleatoria
+            </button>
+            <button mat-raised-button (click)="clearMatrix()">
+              Limpiar
+            </button>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="matrix-container">
+            <!-- GENERACION de la matriz usando matrixInput -->
+            <div *ngFor="let row of matrixInput; let i = index" class="matrix-row">
+              <mat-form-field *ngFor="let cell of row; let j = index" appearance="outline" class="matrix-cell">
+                <input matInput type="number" [(ngModel)]="matrixInput[i][j]" step="0.01">
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div class="process-button">
+            <button mat-raised-button color="primary" (click)="processMatrix()" [disabled]="isLoading">
+              <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+              <span *ngIf="!isLoading">Procesar Matriz</span>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+
+      <!-- Resultados -->
+      <div *ngIf="qrResult || statistics" class="results-section">
+        <!-- Factorización QR -->
+        <mat-card *ngIf="qrResult" class="result-card">
+          <mat-card-header>
+            <mat-card-title>Factorización QR</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="matrices-result">
+              <div class="matrix-section">
+                <h4>Matriz Q:</h4>
+                <div class="matrix-display">
+                  <!-- GENERACION de la matriz Q -->
+                  <div *ngFor="let row of qrResult.Q" class="matrix-row">
+                    <span *ngFor="let cell of row" class="matrix-cell">
+                      {{ formatNumber(cell) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="matrix-section">
+                <h4>Matriz R:</h4>
+                <div class="matrix-display">
+                  <!-- GENERACION de la matriz R -->
+                  <div *ngFor="let row of qrResult.R" class="matrix-row">
+                    <span *ngFor="let cell of row" class="matrix-cell">
+                      {{ formatNumber(cell) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+
+        <!-- Estadísticas -->
+        <mat-card *ngIf="statistics" class="result-card">
+          <mat-card-header>
+            <mat-card-title>Estadísticas</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <mat-icon>trending_up</mat-icon>
+                <div>
+                  <h4>Valor Máximo</h4>
+                  <p>{{ formatNumber(statistics.maxValue) }}</p>
+                </div>
+              </div>
+              
+              <div class="stat-item">
+                <mat-icon>trending_down</mat-icon>
+                <div>
+                  <h4>Valor Mínimo</h4>
+                  <p>{{ formatNumber(statistics.minValue) }}</p>
+                </div>
+              </div>
+              
+              <div class="stat-item">
+                <mat-icon>analytics</mat-icon>
+                <div>
+                  <h4>Promedio</h4>
+                  <p>{{ formatNumber(statistics.promedio) }}</p>
+                </div>
+              </div>
+              
+              <div class="stat-item">
+                <mat-icon>add</mat-icon>
+                <div>
+                  <h4>Suma Total</h4>
+                  <p>{{ formatNumber(statistics.totalSum) }}</p>
+                </div>
+              </div>
+              
+              <div class="stat-item">
+                <mat-icon [color]="statistics.isDiagonal ? 'primary' : 'warn'">
+                  {{ statistics.isDiagonal ? 'check_circle' : 'cancel' }}
+                </mat-icon>
+                <div>
+                  <h4>Es Diagonal</h4>
+                  <p>{{ statistics.isDiagonal ? 'Sí' : 'No' }}</p>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

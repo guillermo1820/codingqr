@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  go-api-test:
+    build: ./go-api
+    environment:
+      - PORT=8080
+    networks:
+      - test-network
+    command: ["go", "test", "-v"]
+
+  node-api-test:
+    build: ./node-api
+    environment:
+      - PORT=3000
+      - GO_API_URL=http://go-api-test:8080
+    depends_on:
+      - go-api-test
+    networks:
+      - test-network
+    command: ["npm", "test"]
+
+  angular-frontend-test:
+    build: ./angular-frontend
+    environment:
+      - NODE_ENV=test
+    networks:
+      - test-network
+    command: ["npm", "test", "--", "--watch=false", "--browsers=ChromeHeadless"]
+
+networks:
+  test-network:
+    driver: bridge
